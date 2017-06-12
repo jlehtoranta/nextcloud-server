@@ -126,7 +126,8 @@ var UserList = {
 			delay: {
 				show: 100,
 				hide: 0
-			}
+			},
+			html: true
 		});
 		if (user.quota === 'default') {
 			$quotaSelect
