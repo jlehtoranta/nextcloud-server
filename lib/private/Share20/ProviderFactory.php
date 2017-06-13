@@ -25,6 +25,7 @@ namespace OC\Share20;
 
 use OC\CapabilitiesManager;
 use OC\GlobalScale\Config;
+use OCA\Circles\ShareByCircleProvider;
 use OCA\FederatedFileSharing\AddressHandler;
 use OCA\FederatedFileSharing\FederatedShareProvider;
 use OCA\FederatedFileSharing\Notifications;
@@ -75,7 +76,8 @@ class ProviderFactory implements IProviderFactory {
 				$this->serverContainer->getDatabaseConnection(),
 				$this->serverContainer->getUserManager(),
 				$this->serverContainer->getGroupManager(),
-				$this->serverContainer->getLazyRootFolder()
+				$this->serverContainer->getLazyRootFolder(),
+				$this->serverContainer->getL10N('lib')
 			);
 		}
 
@@ -175,7 +177,7 @@ class ProviderFactory implements IProviderFactory {
 	/**
 	 * Create the circle share provider
 	 *
-	 * @return FederatedShareProvider
+	 * @return ShareByCircleProvider
 	 */
 	protected function getShareByCircleProvider() {
 

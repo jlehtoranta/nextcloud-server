@@ -26,6 +26,7 @@ namespace OC\Share20;
 use OC\Files\Cache\Cache;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\IL10N;
 use OCP\Share\IShareProvider;
 use OC\Share20\Exception\InvalidShare;
 use OC\Share20\Exception\ProviderException;
@@ -61,6 +62,9 @@ class DefaultShareProvider implements IShareProvider {
 	/** @var IRootFolder */
 	private $rootFolder;
 
+	/** @var IL10N */
+	private $l;
+
 	/**
 	 * DefaultShareProvider constructor.
 	 *
@@ -68,16 +72,19 @@ class DefaultShareProvider implements IShareProvider {
 	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param IRootFolder $rootFolder
+	 * @param IL10N $l
 	 */
 	public function __construct(
 			IDBConnection $connection,
 			IUserManager $userManager,
 			IGroupManager $groupManager,
-			IRootFolder $rootFolder) {
+			IRootFolder $rootFolder,
+			IL10N $l) {
 		$this->dbConn = $connection;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->rootFolder = $rootFolder;
+		$this->l = $l;
 	}
 
 	/**
@@ -806,13 +813,13 @@ class DefaultShareProvider implements IShareProvider {
 		$data = $cursor->fetch();
 
 		if ($data === false) {
-			throw new ShareNotFound();
+			throw new ShareNotFound($this->l->t('The requested share does not exist anymore'));
 		}
 
 		try {
 			$share = $this->createShare($data);
 		} catch (InvalidShare $e) {
-			throw new ShareNotFound();
+			throw new ShareNotFound($this->l->t('The requested share does not exist anymore'));
 		}
 
 		return $share;
