@@ -570,6 +570,12 @@ class Connection extends LDAPUtility {
 			} catch (\OC\ServerNotAvailableException $e) {
 				throw $e;
 			}
+
+			// Set to failure mode, if LDAP error code is not LDAP_SUCCESS or LDAP_INVALID_CREDENTIALS
+			if($error !== 0x00 && $error !== 0x31) {
+				$this->ldapConnectionRes = null;
+			}
+
 			return $bindStatus;
 		}
 		return null;
@@ -623,7 +629,6 @@ class Connection extends LDAPUtility {
 			\OCP\Util::writeLog('user_ldap',
 				'Bind failed: ' . $this->ldap->errno($cr) . ': ' . $this->ldap->error($cr),
 				\OCP\Util::WARN);
-			$this->ldapConnectionRes = null;
 			return false;
 		}
 		return true;
