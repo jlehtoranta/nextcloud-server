@@ -97,7 +97,6 @@ OCA = OCA || {};
 		 * @param {object} result
 		 */
 		processResult: function(model, detector, result) {
-			model['notifyAboutDetectionCompletion'](detector.getTargetKey());
 			if(result.status === 'success') {
 				for (var id in result.changes) {
 					// update and not set method, as values are already stored
@@ -110,6 +109,7 @@ OCA = OCA || {};
 				}
 				model.gotServerError(payload);
 			}
+			model['notifyAboutDetectionCompletion'](detector.getTargetKey());
 		}
 	});
 
