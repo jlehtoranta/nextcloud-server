@@ -121,6 +121,10 @@ OCA = OCA || {};
 					if(!_.isUndefined(view[methodName])) {
 						view[methodName](value);
 					}
+					methodName = view.managedItems[key].updateMethod;
+					if(!_.isUndefined(view[methodName])) {
+						view[methodName]();
+					}
 				}
 			}
 		},
@@ -136,6 +140,10 @@ OCA = OCA || {};
 			if(!_.isUndefined(view.managedItems[result.key])) {
 				var methodName = view.managedItems[result.key].setMethod;
 				view[methodName](result.value);
+				methodName = view.managedItems[result.key].updateMethod;
+				if(!_.isUndefined(view[methodName])) {
+					view[methodName]();
+				}
 				if(!result.isSuccess) {
 					OC.Notification.showTemporary(t('user_ldap', 'Saving failed. Please make sure the database is in Operation. Reload before continuing.'));
 					console.warn(result.errorMessage);
@@ -175,7 +183,8 @@ OCA = OCA || {};
 		},
 
 		/**
-		 * enables affected, managed fields after a detector was run against them
+		 * enables and updates the status of affected, managed fields after
+		 * a detector was run against them.
 		 *
 		 * @param {WizardTabGeneric} view
 		 * @param {string} key
@@ -185,6 +194,10 @@ OCA = OCA || {};
 				view.enableElement(view.managedItems[key].$element);
 				if(!_.isUndefined(view.managedItems[key].$relatedElements)){
 					view.enableElement(view.managedItems[key].$relatedElements);
+				}
+				var methodName = view.managedItems[key].updateMethod;
+				if(!_.isUndefined(view[methodName])) {
+					view[methodName]();
 				}
 				view.managedItems[key].$element.each(function() { view.removeSpinner($(this).attr('id')); });
 			}
