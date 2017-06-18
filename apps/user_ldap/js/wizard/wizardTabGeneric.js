@@ -170,7 +170,7 @@ OCA = OCA || {};
 				if(!_.isUndefined(view.managedItems[key].$relatedElements)){
 					view.disableElement(view.managedItems[key].$relatedElements);
 				}
-				view.attachSpinner(view.managedItems[key].$element.attr('id'));
+				view.managedItems[key].$element.each(function() { view.attachSpinner($(this).attr('id')); });
 			}
 		},
 
@@ -186,7 +186,7 @@ OCA = OCA || {};
 				if(!_.isUndefined(view.managedItems[key].$relatedElements)){
 					view.enableElement(view.managedItems[key].$relatedElements);
 				}
-				view.removeSpinner(view.managedItems[key].$element.attr('id'));
+				view.managedItems[key].$element.each(function() { view.removeSpinner($(this).attr('id')); });
 			}
 		},
 
