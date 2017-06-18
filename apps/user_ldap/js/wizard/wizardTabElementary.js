@@ -37,8 +37,9 @@ OCA = OCA || {};
 					setMethod: 'setHost'
 				},
 				ldap_port: {
-					$element: $('#ldap_port'),
+					$element: $('#ldap_port, #ldap_tls'),
 					setMethod: 'setPort',
+					updateMethod: 'updateTls',
 					$relatedElements: $('.ldapDetectPort')
 				},
 				ldap_dn: {
@@ -116,7 +117,24 @@ OCA = OCA || {};
 		 * @param {string} port
 		 */
 		setPort: function(port) {
-			this.setElementValue(this.managedItems.ldap_port.$element, port);
+			this.setElementValue(this.managedItems.ldap_port.$element.first(), port);
+		},
+
+		/**
+		 * updates the SSL/TLS status text
+		 */
+		updateTls: function() {
+			this.managedItems.ldap_port.$element.last().removeClass('ldap_tls_on');
+			this.managedItems.ldap_port.$element.last().removeClass('ldap_tls_off');
+			if(this.configModel.configuration.ldap_host !== ''
+				&& this.configModel.configuration.ldap_port !== '') {
+				if(this.configModel.configuration.ldap_tls === '1'
+					|| this.configModel.configuration.ldap_host.indexOf('ldaps://') === 0) {
+					this.managedItems.ldap_port.$element.last().addClass('ldap_tls_on');
+				} else {
+					this.managedItems.ldap_port.$element.last().addClass('ldap_tls_off');
+				}
+			}
 		},
 
 		/**
